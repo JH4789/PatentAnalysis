@@ -31,9 +31,19 @@ Navigate to the Analysis directory and use Jupyter Lab to open ```demo.ipynb```
 
 Running all cells in this Jupyter notebook yields a demonstration of the clustering algorithm and histograms tracking a given patents forward citations over time
 
-## Credits
+A copy of the slideshow can be compiled by running the following commands:
+```
+libreoffice --headless --convert-to pdf Huang_ICR_Presentation.odp
+```
+The paper can be compiled by running the following
+```
+lualatex main.tex
+```
+## Acknowledgements
 
-Coming soon!
+I would like to thank Taylor Blair and Andrew J. Ouderkirk for their invaluable contributions to this project. This project would not be possible without their mentorship.
+
+I would also like to acknowledge the Institute for Computing in Research for providing me with the opportunity to conduct this project and contribute to a rich history of scientific discovery. 
 
 ## License
 
