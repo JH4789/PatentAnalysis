@@ -1,0 +1,200 @@
+% !TEX TS-program = xelatex
+
+% This is the LaTeX template
+% for "Constructions", a very simple
+% modification of the standard 
+% LaTeX article class. The 
+% main.tex file of this template
+% as well as localstuff.tex
+% can be used without attribution
+% under the public domain CC-0 license.
+% The bibliography style unified.bst
+% is used under the LaTeX Project 
+% Public License v1.3c.
+
+% Note that the file has to be compiled
+% in XeLaTeX! If you work in Overleaf,
+% XeLaTeX should already be selected 
+% (you can check this by taking a look at
+% Menu > Compiler). Some LaTeX editors
+% will also recognize the correct
+% compiler automatically because of
+% the "magic command" at the beginning
+% of this script.
+
+% to keep the present file readable,
+% packages & commands have been relocated
+% to localstuff.tex:
+\input{localstuff}
+
+
+% For the **running head**, please enter a 
+% short title of the paper as well as 
+% the name/s of the author/s here (for
+% papers with more than 2 authors,
+% use First Author et al.). The full
+% title and the full list of authors and
+% affiliations is to be entered below (see
+% "Insert title and author/s").
+
+\fancyhead[LO]{Huang}
+
+\fancyhead[RO, LE]{\thepage}
+
+
+% Please enter the corresponding author(s) here:
+
+
+
+% if you want to customize the
+% hyphenation of individual words,
+% you can do so here. This can be
+% particularly helpful if you get
+% the notorious "overfull hbox"
+% error.
+
+\hyphenation{
+    hy-phe-na-tion
+    num-bered
+}
+
+\raggedbottom
+\begin{document}
+
+
+% make sure that first page doesn't
+% have running heads:
+\thispagestyle{plain}
+
+% insert title and author/s
+\begin{flushright}
+
+
+\end{flushright}
+
+\vspace{2pt}
+\begin{center}
+    \LARGE\headingfont{\textbf{Nuts and Bolts: \linebreak Analyzing the Development of Technological Breakthroughs through Clustering}}
+\end{center}
+
+\begin{center}
+\vspace{4pt}
+\large
+    Jayden Huang
+    
+\small
+   Institute for Computing in Research 
+
+\end{center}
+
+
+
+\begin{small}
+\begin{center}
+\vspace{9pt}
+\textbf{Abstract}    
+\end{center}
+
+\begin{adjustwidth}{20pt}{20pt}
+\small \noindent Patent citations are a strong indicator of technological innovations and breakthroughs. This article employs unsupervised learning algorithms alongside gamma distributions to analyze the ways in which breakthrough patents evolve over time in regards to their forward citations. The results demonstrate that there are three distinct groups of patent breakthroughs that yield intriguing implications for future technological development. 
+\end{adjustwidth}
+
+
+\end{small}
+
+
+
+
+\vspace{10pt}
+\section{Background}\label{Sec:Introduction}
+
+Technological development is the essence of human progress. Advancements in technology have yielded drastic improvements in human lifespan and quality of life. Only very recently has technological intellectual property been protected by patents. There is a wide variety of literature on the impact that patents have had on technological development \citep{TAKALO20001105}. Inventors are economically and intellectually motivated to file patents, and in doing so they cite other patents. Trajtenberg correctly identifies that patents vary widely in terms of their innovative contributions to their respective fields \citep{trajtenberg}. He also notes that there is a close association between citation-based patent indices and the real social value a given patent produces. As such, this would seem to suggest that highly-cited patents are also very likely breakthrough patents, those that can generate some form of social capital. Overall, the literature-base seems to conclude that patent citations have an association with the perceived or actual value of a given patent. 
+
+However, that is not to say the the number of forward citations can serve as the sole determining factor of a patents worth. It can be noted that care need to be taken in over duly interpreting patent citations as a metric for measuring the economic and social success of patents. This is especially important considering the shifting value of a patent, often alongside its citation rates \citep{MARCO2007290}. The changing nature of the perceived value, and thus the number of forward citations it receives, can be an interesting factor to study. This is especially pertinent when it comes to discussing patents that have acquired an especially high number of forward citations. 
+
+
+
+
+\section{Methodology}
+
+The data used for this study was acquired from the Google Cloud Patent database. Data was retrieved using a SQL-query. A sample of patents with filing dates between 1990 and 2000 was selected for closer examination. This date range was selected because it gave requisite time for the patents examined to mature to fruition relative to the time in present-day. The forward citations from this subset of the database were also retrieved and accounted for. The patents that exceeded a threshold of 1500 forward citations were selected for further examination. While this threshold was somewhat arbitrary, it was still designed with intent. The average patent rarely exceeded 50 forward citations based on preliminary testing, meaning that the threshold of 1500 was sufficient enough to ensure that only the most successful patents were selected for analysis. 
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= 125 mm]{Figures/apple_multi_touch_patent.png}
+    \caption{A sample figure}
+    \label{fig:my_first_figure}
+\end{figure}
+The analysis began with manual examination of histograms generated from individual patent data. This was followed by a K-means clustering algorithm. The clustering algorithm used was a part of the Scikit-Learn package, and this algorithm employed a sum-of-squares criterion shown here: \(\sum_{i=0}^{n}\min_{\mu_j \in C}(||x_i - \mu_j||^2)\) 
+
+The K-means algorithim was selected because it is efficient at reducing inertia, especially given that the data contains few to no outliers and the relatively spherical distribution of the data \citep{scikit-learn}. 
+In this case, \(k = 3\) was used as a starting place for the algorithm based on loosely-identified groupings of patents discovered during manual examination. This starting place proved to be correct, as a later analysis utilizing gamma distributions revealed. A multitude of features were used, including the time that it took for the given citation to reach 1500 citations. This was coupled with the following features: time to reach the first 10th percentile of citations, time to reach the first 90th percentile of citations, time it took to acquire the last 100 citations. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= 150 mm]{Figures/3d_clustering.jpg}
+    \caption{Three-dimensional Scatterplot Visualizing Clustering Algorithm Features and Results}
+    \label{fig:my_first_figure}
+\end{figure}
+
+As the figure above can demonstrate, the clustering algorithm has created recognizable clusters of data. However, in order to verify the veracity of the data beyond mere examination, further methods are necessary. To further verify the validity of the clustering algorithm, a gamma distribution was found for all patents within a given cluster. 
+While the gamma distribution is typically used to model waiting times or disasters, it can be employed in this project to approximate probabilities for the peak of the citations for given patents. The gamma distribution has three main parameters: shape, scale, and threshold. Shape and scale parameters for the gamma distribution $\theta$ and \(k\) were determined using the conventional methods employing the variance and mean of individual patent data set. 
+These parameters were taken from $\alpha$ and $\beta$ where \(\alpha = \frac{\mathrm{E^2}[X]}{\mathrm{Var}(x)}\,\) and \(\beta = \frac{\mathrm{E}[X]}{\mathrm{Var}(x)}\,\).
+
+The corresponding and resulting gamma distributions are then plotted based on the cluster they are a part of. The package used for calculating the gamma distribution probability density function is SciPy, and the fitting of the parameters was also done using this package \citep{2020SciPy-NMeth}. The threshold parameter was set based on the subset of data that was being analyzed. Each plot contains all of the gamma distributions of patents filed within a two-year time period that belong to one of the three clusters derived from the aforementioned clustering algorithm. In order to optimize the calculation in the gamma distribution, the data was normalized to a range between 0 and 1. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 125 mm]{Figures/gamma_cluster_0.jpg}
+    \caption{Three-dimensional Scatterplot Visualizing Clustering Algorithm Features and Results}
+    \label{fig:my_first_figure}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= 125 mm]{Figures/gamma_cluster_1.jpg}
+    \caption{Three-dimensional Scatterplot Visualizing Clustering Algorithm Features and Results}
+    \label{fig:my_first_figure}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= 125 mm]{Figures/gamma_cluster_2.jpg}
+    \caption{Three-dimensional Scatterplot Visualizing Clustering Algorithm Features and Results}
+    \label{fig:my_first_figure}
+\end{figure}
+
+A small disclaimer that the gamma distribution should not be interpreted as a perfect replication of the trends displayed in the histogram representing the same data. For example, the figure below charts the histogram for Apple's multi-touch patent alongside the corresponding gamma distribution. It is evident that the peaks of these two representations do not necessarily align, which is a necessary evil due to the nature of probability density functions. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= 125 mm]{Figures/apple_multi_touch_with_gamma.jpg}
+    \caption{Three-dimensional Scatterplot Visualizing Clustering Algorithm Features and Results}
+    \label{fig:my_first_figure}
+\end{figure}
+\section{Results}
+
+The integrity of the clustering algorithm appears to be held up considering the results of the plotted gamma distributions. The gamma distributions for different clusters are visually distinct from each other. What is interesting to note is the relative sizes of each of these clusters. When examining the breakthrough patents from 1992-1994, it is very easily apparent that there is a wide disparity in how many patents belong to each cluster. The second cluster has more patents than the other two clusters combined with a total of 112. This is easily seen upon visual examination where the density of the distribution is substantially greater than the graphs of the other two clusters. The third cluster is the least populated with only 13 patents. These results can be interpreted in a variety of ways, but the most interesting is the implications it has for a conclusion on how technologies develop. If the vast majority of patents belong to the second cluster, the same cluster that has the most left-skewed distribution, it appears that most technologies mature rather slowly. 
+
+The relative size of the third cluster corroborates this conclusion. The relative scarcity of patents that are able to achieve early success, in other worlds a more right-skewed distribution, is indicative of an overall sluggishness in technological development.
+
+This result can have a variety of interpretations. Perhaps many of the patents lay in dormancy, waiting for a critical mass of other developments in their respective fields before achieving widespread success. It could be possible that many of these patents required pre-requisite technologies that did not exist at the time of filing in order to gain prominence or relevance. 
+
+Another possible interpretation is that fast breakthroughs like those in the third cluster may not exist at all. The massive burst in citations may not be indicative of an actual breakthrough technology, but rather of intra-company or intra-field citations that do not represent actual advancements. However, this theory is only a preliminary one that requires further research to validate or reject. 
+
+In terms of future research, this project shows great promise. The research that has been done in this field has been relatively minimal, leaving a vast expanse of topics to research. For example, the process of this study could be replicated but with the family classification code of each patent included as part of the clustering algorithm. This approach could unveil a potential correlation between the family classification of a patent and the way its citations develop. 
+
+\section{Acknowledgements}
+
+I would like to thank Taylor Blair and Andrew J. Ouderkirk for their invaluable contributions to this project. This project would not be possible without their mentorship.
+
+I would also like to acknowledge the Institute for Computing in Research for providing me with the opportunity to conduct this project and contribute to a rich history of scientific discovery. 
+
+
+
+
+
+
+
+
+
+\bibliography{bibliography}
+%\printbibliography
+\end{document}
